@@ -1,0 +1,80 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test123test123
+    networks:
+      - movi-signal
+    dns_search: .
+    
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - movi-signal
+    dns_search: .
+    
+  server:
+    image: signal_server:latest
+    container_name: server
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - 9002:9002
+    restart: always
+    networks:
+      - movi-signal
+    dns_search: .
+    
+  minio:
+    image: minio/minio:RELEASE.2020-02-07T23-28-16Z
+    ports:
+      - "9000:9000"
+    volumes:
+      - minio:/root/.minio/
+    #volumes:
+    #  - ./minio/.minio/data:/export
+    #  - ./minio/.minio/config:/root/.minio
+    environment:
+      - "MINIO_ACCESS_KEY=AKIAJJGVZR57QYDYDNBA"
+      - "MINIO_SECRET_KEY=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"
+    command: server /export
+    networks:
+      - movi-signal
+    
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c " sleep 10;
+      /usr/bin/mc config host a myminio http://minio:9000 AKIAJJGVZR57QYDYDNBA Ncy4OyqVMTyLuczoQxnxtc9gAnpvAaIBPiALWssH;
+      /usr/bin/mc rm -r --force myminio/bucket-for-attachments;
+      /usr/bin/mc rm -r --force myminio/bucket-for-profile;
+      /usr/bin/mc mb myminio/bucket-for-attachments;
+      /usr/bin/mc mb myminio/bucket-for-profile;
+      /usr/bin/mc policy public myminio/bucket-for-attachments;
+      /usr/bin/mc policy public myminio/bucket-for-profile;
+      exit 0;
+      "
+    networks:
+      - movi-signal
+    
+volumes:
+  postgres-data:
+  minio:
+  
+networks: 
+  movi-signal: 
+    external: true
+

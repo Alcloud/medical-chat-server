@@ -1,0 +1,73 @@
+push:
+  queueSize: 1024 # Size of push pending queue
+
+cache: # Redis server configuration for cache cluster
+  url: redis://redis:6379/1
+  replicaUrls:
+    - redis://redis:6379/2
+
+directory:
+  url: redis://redis:6379/3
+  replicaUrls:
+    - redis://redis:6379/4
+
+messageCache: # Redis server configuration for message store cache
+  redis:
+    url: redis://redis:6379/5
+    replicaUrls:
+      - redis://redis:6379/6
+
+pushScheduler:
+  url: http://redis:6379/7
+  replicaUrls:
+    - http://redis:6379/8
+
+attachments: # AWS S3 configuration
+  #accessKey: AKIAJ4RVQUHEHQ6VV3NA
+  #accessSecret: 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
+  #bucket: signalalcloud
+  accessKey: AKIAJJGVZR57QYDYDNBA
+  accessSecret: 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
+  bucket: bucket-for-attachments
+  endpoint: http://localhost:9000
+
+profiles: # AWS S3 configuration
+  #accessKey: AKIAJ4RVQUHEHQ6VV3NA
+  #accessSecret: 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
+  #bucket: signalalcloud
+  accessKey: AKIAJJGVZR57QYDYDNBA
+  accessSecret: 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
+  bucket: bucket-for-profile
+  region: eu-west-1
+  endpoint: http://localhost:9000
+
+database: # Postgresql database configuration
+  driverClass: org.postgresql.Driver
+  user: postgres
+  password: test123test123
+  url: jdbc:postgresql://postgres:5432/accountdb
+
+messageStore: # Postgresql database configuration for message store
+  driverClass: org.postgresql.Driver
+  user: postgres
+  password: test123test123
+  url: jdbc:postgresql://postgres:5432/messagedb
+
+apn: # Apple Push Notifications configuration
+  bundleId: com.secret.signalTest
+  pushCertificate: /home/wire/signal/Signal-Server/config/signal.p12
+  pushKey: 123456
+
+gcm: # GCM Configuration
+  senderId: 947045074136
+  # 614106875248
+  apiKey: AIzaSyCH0VC5Gkwm_X0gNyq486el7KniqriCvIQ 
+  # AIzaSyC8ZfoONU2yzYGQYNdAXpWldzr7aUikpeA
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 9002
+  adminConnectors:
+    - type: http
+      port: 9003

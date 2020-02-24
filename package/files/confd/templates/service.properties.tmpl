@@ -1,0 +1,70 @@
+# Redis server configuration for cache cluster
+cache: 
+  url: {{ getenv "REDIS_CACHE_URL" }}
+  replicaUrls:
+    - {{ getenv "REDIS_CACHE_REPLICA" }}
+	
+# Redis server configuration for message store cache
+messageCache: 
+  url: {{ getenv "REDIS_MESSAGE_CACHE_URL" }}
+  replicaUrls:
+    - {{ getenv "REDIS_MESSAGE_CACHE_REPLICA" }}
+	
+directory: 
+  url: {{ getenv "REDIS_DIRECTORY_URL" }}
+  replicaUrls:
+    - {{ getenv "REDIS_DIRECTORY_REPLICA" }}
+
+pushScheduler: 
+  url: {{ getenv "REDIS_PUSH_SCHEDULER_URL" }}
+  replicaUrls:
+    - {{ getenv "REDIS_PUSH_SCHEDULER_REPLICA" }}
+
+# Size of push pending queue
+push:
+  queueSize: {{ getenv "PUSH_QUEUE_SIZE" }} 
+  
+# AWS S3 configuration
+attachments: 
+  accessKey: {{ getenv "MINIO_ATTACHMENTS_ACCESS_KEY" }}
+  accessSecret: {{ getenv "MINIO_ATTACHMENTS_ACCESS_SECRET" }}
+  bucket: {{ getenv "MINIO_ATTACHMENTS_BUCKET" }}
+
+profiles: 
+  accessKey: {{ getenv "MINIO_PROFILES_ACCESS_KEY" }}
+  accessSecret: {{ getenv "MINIO_PROFILES_SECRET" }}
+  bucket: {{ getenv "MINIO_PROFILES_BUCKET" }}
+  region: {{ getenv "MINIO_PROFILES_REGION" }}
+
+# Postgresql database configuration
+database: 
+  driverClass: {{ getenv "POSTGRES_DATABASE_DRIVER_CLASS" }}
+  user: {{ getenv "POSTGRES_DATABASE_USER" }}
+  password: {{ getenv "POSTGRES_DATABASE_PASSWORD" }}
+  url: {{ getenv "POSTGRES_DATABASE_URL" }}
+
+# Postgresql database configuration for message store
+messageStore: 
+  driverClass: {{ getenv "POSTGRES_MESSAGE_STORE_DRIVER_CLASS" }}
+  user: {{ getenv "POSTGRES_MESSAGE_STORE_USER" }}
+  password: {{ getenv "POSTGRES_MESSAGE_STORE_PASSWORD" }}
+  url: {{ getenv "POSTGRES_MESSAGE_STORE_URL" }}
+
+# Apple Push Notifications configuration
+apn: 
+  bundleId: {{ getenv "APN_BUNDLE_ID" }}
+  pushCertificate: {{ getenv "APN_PUSH_CERTIFICATE" }}
+  pushKey: {{ getenv "APN_PUSH_KEY" }}
+
+# FCM Configuration
+gcm: 
+  senderId: {{ getenv "FCM_SENDER_ID" }}
+  apiKey: {{ getenv "FCM_API_KEY" }} 
+
+server:
+  applicationConnectors:
+    - type: {{ getenv "APP_SERVER_TYPE" }}
+      port: {{ getenv "APP_SERVER_PORT" }}
+  adminConnectors:
+    - type: {{ getenv "ADMIN_SERVER_TYPE" }}
+      port: {{ getenv "ADMIN_SERVER_PORT" }}

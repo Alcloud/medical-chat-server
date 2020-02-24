@@ -1,0 +1,7 @@
+[template]
+src = "service.properties.tmpl"
+dest = "/tmp/sample1.yml"
+keys = [
+    "server_port",
+	"debuginfo_enabled"
+]
